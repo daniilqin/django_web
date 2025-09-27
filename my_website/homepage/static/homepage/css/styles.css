@@ -1,0 +1,268 @@
+/* Основные стили */
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333333;
+    line-height: 1.6;
+}
+
+/* Главное меню (верхнее) */
+.top-menu {
+    background-color: #000;
+    padding: 15px 0;
+}
+
+.top-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.top-menu .main-nav {
+    display: flex;
+    gap: 30px;
+}
+
+.top-menu .logo {
+    display: flex;
+    align-items: center;
+}
+
+.top-menu .logo img {
+    height: 30px;
+    width: auto;
+}
+
+.top-menu li {
+    background: none;
+    padding: 0;
+}
+
+.top-menu a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    transition: opacity 0.3s;
+}
+
+.top-menu a:hover {
+    opacity: 0.8;
+}
+
+/* Меню категорий */
+.categories-menu {
+    background-color: #f5f5f5;
+    padding: 15px 0;
+}
+
+.categories-menu ul {
+    list-style: none;
+    padding: 0 50px;
+    margin: 0;
+    display: flex;
+    justify-content: flex-start;
+    gap: 30px;
+}
+
+.categories-menu li {
+    background: none;
+    padding: 0;
+}
+
+.categories-menu a {
+    text-decoration: none;
+    color: #000000;
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: uppercase;
+    transition: color 0.3s;
+}
+
+.categories-menu a:hover {
+    color: #616161;
+}
+
+/* Основной контент */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Заголовки */
+h1 {
+    font-size: 32px;
+    margin: 20px 0;
+    text-align: center;
+    color: #000;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+h2 {
+    font-size: 26px;
+    margin: 10px 0;
+    text-align: center;
+    color: #222;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+/* Параграфы */
+p {
+    margin: 15px 0;
+    color: #333;
+    font-size: 16px;
+}
+
+/* Маркированные списки */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+/* Элементы маркированного cписка */
+li {
+    background: none;
+    padding: 0;
+}
+
+/* Коллекции */
+.collections {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 35px;
+    margin: 30px auto;
+    max-width: 1200px;
+}
+
+.collection-item {
+    background: #fff;
+    padding: 0;
+    border: 1px solid #eee;
+    transition: box-shadow 0.3s;
+}
+
+.collection-item-image {
+    width: 100%;
+    height: 350px;
+    background: #f8f8f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.collection-item-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.collection-item:hover .collection-item-image img {
+    transform: scale(1.05);
+}
+
+.collection-item-content {
+    padding: 15px 25px 25px;
+}
+
+.collection-item:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.collection-item h2 {
+    font-size: 20px;
+    margin: 0 0 12px 0;
+    text-align: left;
+}
+
+.collection-item p {
+    font-size: 16px;
+    color: #333;
+    margin: 0 0 20px 0;
+    line-height: 1.5;
+}
+
+.collection-item-content a {
+    display: inline-block;
+    padding: 12px 25px;
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.collection-item-content a:hover {
+    background: #333;
+}
+
+/* Стили для каталога */
+.catalog-categories ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.catalog-categories li {
+    background: none;
+    padding: 0;
+}
+
+.catalog-categories a {
+    text-decoration: none;
+    color: #000000;
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: uppercase;
+    transition: color 0.3s;
+}
+
+.catalog-categories a:hover {
+    color: #616161;
+}
+
+/* Футер */
+footer {
+    background: #000;
+    padding: 40px 0;
+    margin-top: 60px;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+footer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+footer a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 14px;
+    transition: opacity 0.3s;
+}
+
+footer a:hover {
+    opacity: 0.8;
+}

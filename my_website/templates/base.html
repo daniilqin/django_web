@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{% load homepage_tags %}
+{% load static %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% if title %}{{ title }} - {{ site_name }}{% else %}{{ site_name }}{% endif %}</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap">
+    <link rel="stylesheet" href="{% static 'homepage/css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <div class="top-menu">
+            {% include 'includes/navbar.html' %}
+        </div>
+        
+        <div class="categories-menu">
+            {% get_categories as categories %}
+            <ul>
+                {% for category in categories %}
+                <li>
+                    <a href="{% url 'category' category.id %}">{{ category.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            {% include 'includes/footer.html' %}
+        </div>
+    </footer>
+</body>
+</html>

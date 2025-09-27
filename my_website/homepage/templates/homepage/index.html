@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<h1>{{ site_name }}</h1>
+<h2>Новые коллекции</h2>
+
+<div class="collections">
+    {% for new_collection in new_collections %}
+    {% if new_collection.is_published %}
+    <div class="collection-item">
+        <div class="collection-item-image">
+            <img src="{% static 'homepage/images/collections/'|add:new_collection.title|lower|cut:' '|add:'.png' %}" 
+                 alt="{{ new_collection.title }}">
+        </div>
+        <div class="collection-item-content">
+            <h2>{{ new_collection.title }}</h2>
+            
+            {% autoescape off %}
+            <p>{{ new_collection.content|linebreaks|truncatewords:20 }}</p>
+            {% endautoescape %}
+            
+            <a href="{% url 'collection' new_collection.title|slugify %}">Подробнее</a>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+{% endblock %}

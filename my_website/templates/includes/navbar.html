@@ -1,0 +1,20 @@
+{% load static %}
+<ul>
+    <li class="logo">
+        <a href="{% url 'homepage' %}">
+            <img src="{% static 'homepage/images/logo.png' %}" alt="{{ site_name }}">
+        </a>
+    </li>
+    <div class="main-nav">
+        {% for item in menu %}
+        {% if item.url_name != 'login' %}
+        <li>
+            <a href="{% url item.url_name %}">{{ item.title }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </div>
+    <li>
+        <a href="{% url 'login' %}">Войти</a>
+    </li>
+</ul>

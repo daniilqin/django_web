@@ -1,0 +1,5 @@
+<ul>
+    {% for item in contacts %}
+    <li><a href="{{ item.url_address }}" target="_blank">{{ item.name }}</a></li>
+    {% endfor %}
+</ul>
