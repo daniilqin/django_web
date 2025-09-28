@@ -8,7 +8,7 @@
 
 <div class="collections">
     {% for new_collection in new_collections %}
-    {% if new_collection.is_published %}
+    <!--{% if new_collection.is_published %}--> <!--Теперь мы используем кастомный менеджер-->
     <div class="collection-item">
         <div class="collection-item-image">
             <img src="{% static 'homepage/images/collections/'|add:new_collection.title|lower|cut:' '|add:'.png' %}" 
@@ -21,7 +21,7 @@
             <p>{{ new_collection.content|linebreaks|truncatewords:20 }}</p>
             {% endautoescape %}
             
-            <a href="{% url 'collection' new_collection.title|slugify %}">Подробнее</a>
+            <a href="{{ new_collection.get_absolute_url }}">Подробнее</a>
         </div>
     </div>
     {% endif %}

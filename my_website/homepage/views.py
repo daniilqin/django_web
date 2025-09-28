@@ -1,18 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
+from .models import Collection
 
 # Create your views here.
-
-data_db = [
-    {'id': 1, 'title': 'The North Face',
-     'content': 'Коллекция The North Face 2025', 'is_published': True},
-    {'id': 2, 'title': 'Tommy Hilfiger',
-     'content': 'Коллекция Tommy Hilfiger 2025', 'is_published': True},
-    {'id': 3, 'title': 'Levis',
-     'content': 'Коллекция Levis 2025', 'is_published': True},
-    {'id': 4, 'title': 'Nike',
-     'content': 'Коллекция Nike 2025', 'is_published': True},
-]
 
 categories_db = [
     {'id': 'womens', 'name': 'Женщинам'},
@@ -22,9 +12,15 @@ categories_db = [
 
 
 def index(request):
+    # Получаем коллекции из базы данных (только опубликованные)
+    new_collections = Collection.published.all()
+
+    # Получаем коллекции из базы данных (все)
+    # new_collections = Collection.objects.all()
+
     data = {
         'title': 'Главная',
-        'new_collections': data_db,
+        'new_collections': new_collections,
     }
     return render(request, 'homepage/index.html', context=data)
 
@@ -53,4 +49,9 @@ def show_category(request, category_slug):
 
 
 def show_collection(request, collection_slug):
-    return HttpResponse(f'<h1>Коллекция - {collection_slug}</h1>')
+    collection = get_object_or_404(Collection, slug=collection_slug)
+    data = {
+        'title': collection.title,
+        'collection': collection,
+    }
+    return render(request, 'homepage/collection.html', context=data)

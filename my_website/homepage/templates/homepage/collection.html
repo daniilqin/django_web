@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<h1>{{ collection.title }}</h1>
+<h2>{{ collection.content }}</h2>
+
+<div class="collection-detail">
+    {% if collection.image %}
+        <img src="{{ collection.image.url }}" alt="{{ collection.title }}" style="max-width: 300px;">
+    {% endif %}
+</div>
+
+<div class="collection-item-content">
+    <a href="{% url 'homepage' %}">❮ Назад</a>
+</div>
+
+{% endblock %}
