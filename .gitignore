@@ -1,8 +1,24 @@
+# Виртуальное окружение
 venv/
+.env/
 
+# IDE
 .vscode/
+.idea/
 
+# mypy / pytest / coverage
 .mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/
 
+# Байткод
 __pycache__/
 *.py[cod]
+*$py.class
+
+# Базы данных SQLite
+*.sqlite3
+
+# Логи
+*.log
