@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load catalog_tags %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<!-- Категории -->
+{% show_categories %}
+
+<!-- Теги -->
+{% show_tags %}
+
+<!-- Информация о продукте -->
+<div class="product-detail">
+    <div class="product-info">
+        <h2>{{ product.name }}</h2>
+        
+        <div class="product-price">
+            {{ product.price }} руб.
+        </div>
+        
+        <div class="product-description">
+            <h3>Описание:</h3>
+            <p>{{ product.description|linebreaks }}</p>
+        </div>
+        
+        <!-- Категория продукта -->
+        {% if product.category %}
+            <div class="product-category">
+                <h3>Категория:</h3>
+                <div class="tags-list">
+                    <a href="{{ product.category.get_absolute_url }}" class="tag-link">{{ product.category.name }}</a>
+                </div>
+            </div>
+        {% endif %}
+        
+        <!-- Теги продукта -->
+        {% if product.tags.all %}
+            <div class="product-tags">
+                <h3>Теги:</h3>
+                <div class="tags-list">
+                    {% for tag in product.tags.all %}
+                        <a href="{{ tag.get_absolute_url }}" class="tag-link">{{ tag.name }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        
+        <!-- Детальная информация о товаре -->
+        {% if product.detail %}
+            <div class="product-details">
+                <h3>Характеристики:</h3>
+                <div class="details-list">
+                    {% if product.detail.size %}
+                        <p><strong>Размер:</strong> {{ product.detail.size }}</p>
+                    {% endif %}
+                    {% if product.detail.material %}
+                        <p><strong>Материал:</strong> {{ product.detail.material }}</p>
+                    {% endif %}
+                    {% if product.detail.color %}
+                        <p><strong>Цвет:</strong> {{ product.detail.color }}</p>
+                    {% endif %}
+                    {% if product.detail.weight %}
+                        <p><strong>Вес:</strong> {{ product.detail.weight }} кг</p>
+                    {% endif %}
+                    {% if product.detail.manufacturer %}
+                        <p><strong>Производитель:</strong> {{ product.detail.manufacturer }}</p>
+                    {% endif %}
+                    {% if product.detail.country_origin %}
+                        <p><strong>Страна производства:</strong> {{ product.detail.country_origin }}</p>
+                    {% endif %}
+                    {% if product.detail.production_year %}
+                        <p><strong>Год производства:</strong> {{ product.detail.production_year }}</p>
+                    {% endif %}
+                    {% if product.detail.warranty_period %}
+                        <p><strong>Гарантия:</strong> {{ product.detail.warranty_period }}</p>
+                    {% endif %}
+                    {% if product.detail.sku %}
+                        <p><strong>Артикул:</strong> {{ product.detail.sku }}</p>
+                    {% endif %}
+                    {% if product.detail.care_instructions %}
+                        <p><strong>Уход:</strong> {{ product.detail.care_instructions }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+        
+        <!-- Дополнительная информация -->
+        <div class="product-meta">
+            <p>Дата добавления: {{ product.created_at|date:"d.m.Y" }}</p>
+            <p>Последнее обновление: {{ product.updated_at|date:"d.m.Y H:i" }}</p>
+        </div>
+    </div>
+</div>
+
+<!-- Навигация -->
+<div class="navigation">
+    <a href="{% url 'catalog' %}">❮ Назад к каталогу</a>
+    
+    {% if product.category %}
+        <a href="{{ product.category.get_absolute_url }}">❮ К категории «{{ product.category.name }}»</a>
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -1,9 +1,11 @@
 <div class="catalog-categories">
-    <ul>
-        {% for category in categories %}
-        <li>
-            <a href="{% url 'category' category.url_name %}">{{ category.name }}</a>
-        </li>
-        {% endfor %}
-    </ul>
+    {% if categories %}
+        <ul>
+            {% for category in categories %}
+            <li>
+                <a href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 </div>

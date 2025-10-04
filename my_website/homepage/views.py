@@ -4,11 +4,11 @@ from .models import Collection
 
 # Create your views here.
 
-categories_db = [
-    {'id': 'womens', 'name': 'Женщинам'},
-    {'id': 'mens', 'name': 'Мужчинам'},
-    {'id': 'kids', 'name': 'Детям'},
-]
+# categories_db = [
+#     {'id': 'womens', 'name': 'Женщинам'},
+#     {'id': 'mens', 'name': 'Мужчинам'},
+#     {'id': 'kids', 'name': 'Детям'},
+# ]
 
 
 def index(request):
@@ -44,8 +44,8 @@ def login(request):
     return HttpResponse('<h1>Войти</h1>')
 
 
-def show_category(request, category_slug):
-    return HttpResponse(f'<h1>Категория - {category_slug}</h1>')
+# def show_category(request, category_slug):
+#     return HttpResponse(f'<h1>Категория - {category_slug}</h1>')
 
 
 def show_collection(request, collection_slug):

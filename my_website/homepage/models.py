@@ -2,9 +2,12 @@ from django.db import models
 from django.urls import reverse
 
 # Create your models here.
+
+
 class PublishedModel(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(is_published=Collection.Status.PUBLISHED)
+
 
 class Collection(models.Model):
     class Status(models.IntegerChoices):

@@ -14,12 +14,27 @@
             {% include 'includes/navbar.html' %}
         </div>
         
+        {% comment %}
+        <!--
         <div class="categories-menu">
             {% get_categories as categories %}
             <ul>
                 {% for category in categories %}
                 <li>
                     <a href="{% url 'category' category.id %}">{{ category.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        -->
+        {% endcomment %}
+
+        <div class="categories-menu">
+            {% get_top_categories as categories %}
+            <ul>
+                {% for cat in categories %}
+                <li>
+                    <a href="{{ cat.url }}">{{ cat.name }}</a>
                 </li>
                 {% endfor %}
             </ul>

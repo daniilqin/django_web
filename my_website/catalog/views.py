@@ -1,30 +1,61 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, Http404, HttpResponseNotFound
 
 from datetime import datetime as dt
+from .models import Product, Category, Tag
 
 # Create your views here.
 
-categories_db = [
-    {'name': 'Женская одежда', 'url_name': 'womens'},
-    {'name': 'Мужская одежда', 'url_name': 'mens'},
-    {'name': 'Детская одежда', 'url_name': 'kids'},
-    {'name': 'Обувь', 'url_name': 'shoes'},
-    {'name': 'Аксессуары', 'url_name': 'accessories'},
-    {'name': 'Новинки', 'url_name': 'new'},
-    {'name': 'Распродажа', 'url_name': 'sale'},
-]
-
-
 def catalog(request):
+    # Получаем все опубликованные товары
+    products = Product.published.all()
+    
     data = {
         'title': 'Каталог',
+        'category': None,
+        'products': products,
     }
     return render(request, 'catalog/catalog.html', context=data)
 
 
-def category_detail(request, category_slug):
-    return HttpResponse(f'<h1>Категория - {category_slug}')
+def show_category(request, category_slug):
+    # Получаем категорию по slug
+    category = get_object_or_404(Category, slug=category_slug)
+    
+    # Получаем товары этой категории (связь Many-to-One)
+    products = Product.published.filter(category=category)
+    
+    data = {
+        'title': 'Каталог',
+        'category': category,
+        'products': products,
+    }
+    return render(request, 'catalog/catalog.html', context=data)
+
+
+def show_tag(request, tag_slug):
+    # Получаем тег по slug
+    tag = get_object_or_404(Tag, slug=tag_slug)
+    
+    # Получаем товары с этим тегом (связь Many-to-Many)
+    products = Product.published.filter(tags=tag)
+    
+    data = {
+        'title': 'Каталог',
+        'tag': tag,
+        'products': products,
+    }
+    return render(request, 'catalog/catalog.html', context=data)
+
+
+def show_product(request, product_slug):
+    product = get_object_or_404(Product, slug=product_slug)
+
+    data = {
+        'title': 'Каталог',
+        'product': product,
+    }
+    return render(request, 'catalog/product.html', context=data)
 
 
 def item_detail(request, item_slug):

@@ -234,6 +234,222 @@ li {
     color: #616161;
 }
 
+/* Стили для товаров */
+.products-section {
+    margin: 20px 0;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin: 20px 0;
+}
+
+.product-item {
+    background: #fff;
+    border: 1px solid #eee;
+    padding: 20px;
+    transition: box-shadow 0.3s;
+}
+
+.product-item:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.product-item h3 {
+    font-size: 18px;
+    margin: 0 0 10px 0;
+    color: #333;
+    font-weight: 500;
+}
+
+.product-price {
+    font-size: 24px;
+    font-weight: 400;
+    color: #000;
+    margin: 15px 0;
+}
+
+.product-description {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.4;
+    margin: 10px 0 15px 0;
+}
+
+.product-link {
+    display: inline-block;
+    text-decoration: none;
+    color: #333;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background-color: #f8f8f8;
+    transition: all 0.3s;
+    margin-top: 0px;
+}
+
+.product-link:hover {
+    background-color: #333;
+    color: #fff;
+    border-color: #333;
+}
+
+/* Стили для страницы товара */
+.product-detail {
+    max-width: 800px;
+    margin: 30px auto;
+    background: #fff;
+    border: 1px solid #eee;
+    padding: 30px;
+}
+
+.product-info h2 {
+    text-align: left;
+    margin: 0 0 20px 0;
+    font-size: 24px;
+    text-transform: capitalize;
+}
+
+.product-description h3,
+.product-category h3,
+.product-tags h3,
+.product-details h3 {
+    font-size: 16px;
+    margin: 20px 0 10px 0;
+    color: #333;
+    font-weight: 500;
+}
+
+.details-list {
+    margin: 10px 0;
+}
+
+.details-list p {
+    margin: 8px 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.details-list strong {
+    color: #333;
+    font-weight: 500;
+}
+
+.tags-list {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.tag-link {
+    text-decoration: none;
+    color: #000000;
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: none;
+    padding: 4px 8px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background-color: #f8f8f8;
+    transition: all 0.3s;
+}
+
+.tag-link:hover {
+    background-color: #333;
+    color: #fff;
+    border-color: #333;
+}
+
+.product-meta {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    font-size: 14px;
+    color: #666;
+}
+
+.product-meta p {
+    margin: 5px 0;
+}
+
+.navigation {
+    margin: 30px 0;
+    text-align: center;
+}
+
+.navigation a {
+    display: inline-block;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background-color: #f8f8f8;
+    transition: all 0.3s;
+    margin: 0 10px;
+}
+
+.navigation a:hover {
+    background-color: #333;
+    color: #fff;
+    border-color: #333;
+}
+
+/* Стили для тегов */
+.catalog-tags {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.catalog-tags h3 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 15px;
+    color: #333;
+    text-transform: uppercase;
+}
+
+.catalog-tags ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.catalog-tags li {
+    background: none;
+    padding: 0;
+}
+
+.catalog-tags a {
+    text-decoration: none;
+    color: #000000;
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: capitalize;
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background-color: #f8f8f8;
+    transition: all 0.3s;
+}
+
+.catalog-tags a:hover {
+    background-color: #333;
+    color: #fff;
+    border-color: #333;
+}
+
 /* Футер */
 footer {
     background: #000;

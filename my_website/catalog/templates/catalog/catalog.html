@@ -3,5 +3,52 @@
 
 {% block content %}
 <h1>{{ title }}</h1>
+
+<!-- Категории -->
 {% show_categories %}
+
+<!-- Теги -->
+{% show_tags %}
+
+<!-- Если категория выбрана -->
+{% if category %}
+    <h2>{{ category.name }}</h2>
+    
+    {% if category.description %}
+        <p>{{ category.description }}</p>
+    {% endif %}
+    
+{% else %}
+    <h2>Все товары</h2>
+{% endif %}
+
+<!-- Список товаров -->
+<div class="products-section">
+    {% if products %}
+        <div class="products-grid">
+            {% for product in products %}
+            <div class="product-item">
+                <h3>{{ product.name }}</h3>
+                <p class="product-price">{{ product.price }} руб.</p>
+                <p class="product-description">{{ product.description|truncatewords:15 }}</p>
+                <a href="{{ product.get_absolute_url }}" class="product-link">Подробнее</a>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        {% if category %}
+            <p>В этой категории пока нет товаров.</p>
+        {% else %}
+            <p>Товары не найдены.</p>
+        {% endif %}
+    {% endif %}
+</div>
+
+<!-- Навигация: кнопка "Назад к каталогу" показывается только если выбрана категория -->
+{% if category %}
+<div class="navigation">
+    <a href="{% url 'catalog' %}">❮ Назад к каталогу</a>
+</div>
+{% endif %}
+
 {% endblock %}
