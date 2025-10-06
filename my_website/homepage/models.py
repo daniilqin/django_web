@@ -18,7 +18,13 @@ class Collection(models.Model):
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
     content = models.TextField(blank=True, verbose_name="Описание")
     image = models.ImageField(upload_to='collections/', blank=True, null=True, verbose_name="Изображение коллекции")
-    is_published = models.BooleanField(choices=Status.choices, default=Status.DRAFT, verbose_name="Опубликовано")
+
+    is_published = models.BooleanField(
+        choices=tuple(map(lambda x: (bool(x[0]), x[1]), Status.choices)),
+        default=Status.DRAFT,
+        verbose_name="Опубликовано"
+    )
+
     time_create = models.DateTimeField(auto_now_add=True, verbose_name="Время создания")
     time_update = models.DateTimeField(auto_now=True, verbose_name="Время изменения")
 
@@ -26,6 +32,8 @@ class Collection(models.Model):
     published = PublishedModel()   # наш кастомный менеджер
 
     class Meta:
+        verbose_name = "Коллекция"
+        verbose_name_plural = "Коллекции"
         ordering = ['-time_create'] 
         indexes = [models.Index(fields=['-time_create']),]
 

@@ -57,15 +57,19 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Цена")
     
     # Связь Many-to-One: один товар принадлежит одной категории
-    category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='products', 
-                                verbose_name="Категория", null=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, null=True, blank=True, 
+                                related_name='products', verbose_name="Категория")
     
     # Связь Many-to-Many: товар может иметь много тегов, тег может быть у многих товаров
-    tags = models.ManyToManyField(Tag, related_name='products', verbose_name="Теги", blank=True)
+    tags = models.ManyToManyField(Tag, blank=True, related_name='products', verbose_name="Теги")
 
     # Статус и даты
-    is_published = models.BooleanField(choices=Status.choices, default=Status.DRAFT, 
-                                      verbose_name="Опубликовано")
+    is_published = models.BooleanField(
+        choices=tuple(map(lambda x: (bool(x[0]), x[1]), Status.choices)),
+        default=Status.DRAFT,
+        verbose_name="Опубликовано"
+    )
+
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
 
@@ -89,8 +93,8 @@ class ProductDetail(models.Model):
     """Дополнительная информация о товаре (связь Один-к-Одному)"""
     
     # Связь Один-к-Одному: каждый товар имеет одну детальную информацию
-    product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name='detail',
-                                 verbose_name="Товар", primary_key=True)
+    product = models.OneToOneField(Product, on_delete=models.CASCADE, primary_key=True, 
+                                    related_name='detail', verbose_name="Товар")
     
     # Размеры и характеристики
     size = models.CharField(max_length=50, blank=True, verbose_name="Размер")

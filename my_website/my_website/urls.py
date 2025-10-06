@@ -19,7 +19,12 @@ from django.urls import include, path
 
 from catalog.views import page_not_found
 
+admin.site.site_header = "Панель администрирования BrandStack"
+admin.site.index_title = "Интернет-магазин BrandStack"
+admin.site.site_title = "BrandStack Admin"
+
 urlpatterns = [
+    path('__debug__/', include('debug_toolbar.urls')),
     path('admin/', admin.site.urls),
     path('', include('homepage.urls')),
     path('catalog/', include('catalog.urls')),

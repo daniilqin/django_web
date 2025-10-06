@@ -1,0 +1,83 @@
+/* Минимальные стили для админки в соответствии с дизайном сайта */
+
+/* Шапка админки - черная как в топ-меню */
+#header {
+    background: #000;
+    color: #ffffff;
+    border-bottom: 2px solid #333;
+}
+
+#site-name, #site-name a:link, #site-name a:visited {
+    color: #ffffff !important;
+}
+
+/* Заголовки модулей - темно-серые */
+.module h2, .module caption, .inline-group h2 {
+    background: #333;
+    color: #ffffff;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+/* Кнопки - черные */
+.submit-row input[type="submit"] {
+    background: #000;
+    border-color: #000;
+    color: #ffffff;
+    border-radius: 3px;
+    padding: 8px 16px;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+.submit-row input[type="submit"]:hover {
+    background: #333;
+    border-color: #333;
+}
+
+/* Таблицы - простые границы */
+table thead th {
+    background: #f8f8f8;
+    color: #333;
+    border: 1px solid #ddd;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+/* Ссылки */
+a:link, a:visited {
+    color: #333;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #000;
+    text-decoration: underline;
+}
+
+/* Модули - легкие тени */
+.module {
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Кнопки добавления */
+.addlink, .changelink {
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 4px 8px;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.addlink:hover, .changelink:hover {
+    background: #333;
+    color: #ffffff;
+    border-color: #333;
+}
