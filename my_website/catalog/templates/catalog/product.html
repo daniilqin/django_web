@@ -15,6 +15,13 @@
     <div class="product-info">
         <h2>{{ product.name }}</h2>
         
+        <!-- Изображение продукта -->
+        {% if product.image %}
+            <div class="product-image">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-img">
+            </div>
+        {% endif %}
+        
         <div class="product-price">
             {{ product.price }} руб.
         </div>

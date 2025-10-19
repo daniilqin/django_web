@@ -55,6 +55,8 @@ class Product(models.Model):
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
     description = models.TextField(verbose_name="Описание товара")
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Цена")
+    image = models.ImageField(upload_to='products/%Y/%m/%d/', default=None, null=True, 
+                              blank=True, verbose_name="Изображение товара")
     
     # Связь Many-to-One: один товар принадлежит одной категории
     category = models.ForeignKey(Category, on_delete=models.PROTECT, null=True, blank=True, 

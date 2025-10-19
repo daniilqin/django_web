@@ -16,7 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-
+from django.conf import settings
+from django.conf.urls.static import static
 from catalog.views import page_not_found
 
 admin.site.site_header = "Панель администрирования BrandStack"
@@ -29,5 +30,10 @@ urlpatterns = [
     path('', include('homepage.urls')),
     path('catalog/', include('catalog.urls')),
 ]
+
+# Добавляем обработку медиа-файлов в режиме разработки
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 
 handler404 = page_not_found

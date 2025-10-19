@@ -2,7 +2,10 @@
 {% load catalog_tags %}
 
 {% block content %}
-<h1>{{ title }}</h1>
+<div class="catalog-header">
+    <h1>{{ title }}</h1>
+    <a href="{% url 'add_product' %}" class="add-product-btn">Добавить товар</a>
+</div>
 
 <!-- Категории -->
 {% show_categories %}
@@ -28,6 +31,13 @@
         <div class="products-grid">
             {% for product in products %}
             <div class="product-item">
+                <!-- Изображение продукта -->
+                {% if product.image %}
+                    <div class="product-image">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-img">
+                    </div>
+                {% endif %}
+                
                 <h3>{{ product.name }}</h3>
                 <p class="product-price">{{ product.price }} руб.</p>
                 <p class="product-description">{{ product.description|truncatewords:15 }}</p>

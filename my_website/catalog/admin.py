@@ -1,6 +1,7 @@
 from operator import is_
 from django.contrib import admin, messages
 from .models import Category, Tag, Product, ProductDetail
+from django.utils.html import mark_safe
 
 # Register your models here.
 
@@ -50,10 +51,13 @@ class ProductDetailInline(admin.StackedInline):
 # Админка для модели Product
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    fields = ['name', 'slug', 'description', 'price', 'category', 'tags', 'is_published']
+    save_on_top = True
+    fields = ['name', 'slug', 'description', 'price', 'image', 'image_preview', 
+    'category', 'tags', 'is_published']
+    readonly_fields = ['image_preview']
     prepopulated_fields = {'slug': ('name',)}
     inlines = [ProductDetailInline]
-    list_display = ('id', 'name', 'price', 'category', 'created_at', 'is_published', 
+    list_display = ('id', 'name', 'price', 'image_preview', 'category', 'created_at', 'is_published', 
     'name_length', 'is_expensive')
     list_display_links = ('id', 'name')
     list_editable = ('price', 'is_published',)
@@ -72,6 +76,12 @@ class ProductAdmin(admin.ModelAdmin):
     @admin.display(boolean=True, description='Дорогой товар')
     def is_expensive(self, obj):
         return obj.price > 10000
+
+    @admin.display(description='Изображение товара')
+    def image_preview(self, obj):
+        if obj.image:
+            return mark_safe(f'<img src="{obj.image.url}" style="max-width: 100px; max-height: 100px;" />')
+        return 'Нет изображения товара'
 
     # Методы для действий в админке
     @admin.action(description='Опубликовать выбранные товары')
