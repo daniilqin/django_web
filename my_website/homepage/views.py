@@ -1,6 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
+from django.views.generic import TemplateView, DetailView, ListView
+from django.views import View
 from .models import Collection
+from .utils import HomeContextMixin
 
 # Create your views here.
 
@@ -11,47 +14,63 @@ from .models import Collection
 # ]
 
 
-def index(request):
-    # Получаем коллекции из базы данных (только опубликованные)
-    new_collections = Collection.published.all()
-
-    # Получаем коллекции из базы данных (все)
-    # new_collections = Collection.objects.all()
-
-    data = {
-        'title': 'Главная',
-        'new_collections': new_collections,
-    }
-    return render(request, 'homepage/index.html', context=data)
-
-
-def promotions(request):
-    return HttpResponse('<h1>Акции и скидки</h1>')
+# Главная страница сайта
+class IndexView(HomeContextMixin, ListView):
+    model = Collection
+    template_name = 'homepage/index.html'
+    context_object_name = 'new_collections'
+    page_title = 'Главная'
+    
+    def get_queryset(self):
+        return Collection.published.all()
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context)
 
 
-def contacts(request):
-    return HttpResponse('<h1>Контакты</h1>')
+# Страница акций и скидок
+class PromotionsView(View):
+    def get(self, request):
+        return HttpResponse('<h1>Акции и скидки</h1>')
 
 
-def about(request):
-    data = {
-        'title': 'О сайте',
-    }
-    return render(request, 'homepage/about.html', context=data)
+# Страница контактов
+class ContactsView(View):
+    def get(self, request):
+        return HttpResponse('<h1>Контакты</h1>')
 
 
-def login(request):
-    return HttpResponse('<h1>Войти</h1>')
+# Страница "О сайте"
+class AboutView(HomeContextMixin, TemplateView):
+    template_name = 'homepage/about.html'
+    page_title = 'О сайте'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context)
+
+
+# Страница входа в систему
+class LoginView(View):
+    def get(self, request):
+        return HttpResponse('<h1>Войти</h1>')
 
 
 # def show_category(request, category_slug):
 #     return HttpResponse(f'<h1>Категория - {category_slug}</h1>')
 
 
-def show_collection(request, collection_slug):
-    collection = get_object_or_404(Collection, slug=collection_slug)
-    data = {
-        'title': collection.title,
-        'collection': collection,
-    }
-    return render(request, 'homepage/collection.html', context=data)
+# Отображение конкретной коллекции
+class CollectionView(HomeContextMixin, DetailView):
+    model = Collection
+    template_name = 'homepage/collection.html'
+    context_object_name = 'collection'
+    slug_url_kwarg = 'collection_slug'
+    
+    def get_queryset(self):
+        return Collection.published.all()
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context, title=self.object.title)

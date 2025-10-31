@@ -4,10 +4,14 @@
 
 <h1>{{ title }}</h1>
 
+<div class="form-card">
 <form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Добавить</button>
+    <button type="submit" class="btn-danger">
+        {% if is_edit %}Сохранить изменения{% else %}Добавить{% endif %}
+    </button>
 </form>
+</div>
 
 {% endblock %}

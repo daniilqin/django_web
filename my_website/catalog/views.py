@@ -1,98 +1,141 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, Http404, HttpResponseNotFound
+from django.views import View
+from django.views.generic import ListView, DetailView, FormView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
 
 from datetime import datetime as dt
 from .models import Product, Category, Tag
 from .forms import AddProductForm, AddProductModelForm, UploadFileForm
+from .utils import CatalogContextMixin
 import uuid
 
 # Create your views here.
 
-# Каталог
-def catalog(request):
-    # Получаем все опубликованные товары
-    products = Product.published.all()
-    
-    data = {
-        'title': 'Каталог',
-        'category': None,
-        'products': products,
-    }
-    return render(request, 'catalog/catalog.html', context=data)
 
-# Показ категории
-def show_category(request, category_slug):
-    # Получаем категорию по slug
-    category = get_object_or_404(Category, slug=category_slug)
+# Каталог товаров
+class CatalogView(CatalogContextMixin, ListView):
+    model = Product
+    template_name = 'catalog/catalog.html'
+    context_object_name = 'products'
+    page_title = 'Каталог'
     
-    # Получаем товары этой категории (связь Many-to-One)
-    products = Product.published.filter(category=category)
+    def get_queryset(self):
+        return Product.published.all()
     
-    data = {
-        'title': 'Каталог',
-        'category': category,
-        'products': products,
-    }
-    return render(request, 'catalog/catalog.html', context=data)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context, category=None)
 
-# Показ тега
-def show_tag(request, tag_slug):
-    # Получаем тег по slug
-    tag = get_object_or_404(Tag, slug=tag_slug)
+
+# Показ товаров категории
+class CategoryView(CatalogContextMixin, ListView):
+    model = Product
+    template_name = 'catalog/catalog.html'
+    context_object_name = 'products'
+    page_title = 'Каталог'
     
-    # Получаем товары с этим тегом (связь Many-to-Many)
-    products = Product.published.filter(tags=tag)
+    def get_queryset(self):
+        category = get_object_or_404(Category, slug=self.kwargs['category_slug'])
+        return Product.published.filter(category=category)
     
-    data = {
-        'title': 'Каталог',
-        'tag': tag,
-        'products': products,
-    }
-    return render(request, 'catalog/catalog.html', context=data)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category = get_object_or_404(Category, slug=self.kwargs['category_slug'])
+        return self.get_mixin_context(context, category=category)
+
+
+# Показ товаров с тегом
+class TagView(CatalogContextMixin, ListView):
+    model = Product
+    template_name = 'catalog/catalog.html'
+    context_object_name = 'products'
+    page_title = 'Каталог'
+    
+    def get_queryset(self):
+        tag = get_object_or_404(Tag, slug=self.kwargs['tag_slug'])
+        return Product.published.filter(tags=tag)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        tag = get_object_or_404(Tag, slug=self.kwargs['tag_slug'])
+        return self.get_mixin_context(context, tag=tag)
+
 
 # Показ товара
-def show_product(request, product_slug):
-    product = get_object_or_404(Product, slug=product_slug)
+class ProductView(CatalogContextMixin, DetailView):
+    model = Product
+    template_name = 'catalog/product.html'
+    context_object_name = 'product'
+    slug_url_kwarg = 'product_slug'
+    page_title = 'Каталог'
+    
+    def get_queryset(self):
+        return Product.published.all()
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context)
 
-    data = {
-        'title': 'Каталог',
-        'product': product,
-    }
-    return render(request, 'catalog/product.html', context=data)
 
 # Добавление товара через форму, связанную с моделью (используется в проекте)
-def add_product(request):
-    if request.method == 'POST':
-        form = AddProductModelForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('catalog')
-    else:
-        form = AddProductModelForm()
+class AddProductView(CatalogContextMixin, CreateView):
+    model = Product
+    form_class = AddProductModelForm
+    template_name = 'catalog/add_product.html'
+    success_url = reverse_lazy('catalog')
+    page_title = 'Добавление товара'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context)
 
-    data = {
-        'title': 'Добавить товар',
-        'form': form,
-    }
 
-    return render(request, 'catalog/add_product.html', context=data)
+# Редактирование товара
+class UpdateProductView(CatalogContextMixin, UpdateView):
+    model = Product
+    form_class = AddProductModelForm
+    template_name = 'catalog/add_product.html'
+    slug_url_kwarg = 'product_slug'
+    page_title = 'Редактирование товара'
+    
+    def get_success_url(self):
+        return reverse_lazy('product', kwargs={'product_slug': self.object.slug})
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context, is_edit=True)
+
+
+# Удаление товара
+class DeleteProductView(CatalogContextMixin, DeleteView):
+    model = Product
+    template_name = 'catalog/confirm_delete.html'
+    slug_url_kwarg = 'product_slug'
+    success_url = reverse_lazy('catalog')
+    context_object_name = 'product'
+    page_title = 'Удаление товара'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context)
+
 
 # Загрузка файла
-def upload_file(request):
-    if request.method == "POST":
-        form = UploadFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            handle_uploaded_file(form.cleaned_data['file'])
-            return redirect('catalog')
-    else:
-        form = UploadFileForm()
+class UploadFileView(CatalogContextMixin, FormView):
+    form_class = UploadFileForm
+    template_name = 'catalog/upload_file.html'
+    success_url = reverse_lazy('catalog')
+    page_title = 'Загрузка файла'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context)
+    
+    def form_valid(self, form):
+        handle_uploaded_file(form.cleaned_data['file'])
+        return super().form_valid(form)
 
-    data = {
-        'title': 'Загрузка файла',
-        'form': form,
-    }
-
-    return render(request, 'catalog/upload_file.html', context=data)
 
 # Сохранение загруженного файла
 def handle_uploaded_file(f):
@@ -107,6 +150,7 @@ def handle_uploaded_file(f):
     with open(f"uploads/{name}_{suffix}{ext}", "wb+") as destination:
         for chunk in f.chunks():
             destination.write(chunk)
+
 
 # Добавление товара через форму, несвязанную с моделью (не используется в проекте)
 # def add_product(request):
