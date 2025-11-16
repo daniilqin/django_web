@@ -8,9 +8,16 @@
 <form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn-danger">
-        {% if is_edit %}Сохранить изменения{% else %}Добавить{% endif %}
-    </button>
+    <div class="form-actions">
+        <button type="submit" class="btn-danger">
+            {% if is_edit %}Сохранить изменения{% else %}Добавить товар{% endif %}
+        </button>
+        {% if is_edit %}
+            <a href="{{ product.get_absolute_url }}" class="btn-cancel">Отмена</a>
+        {% else %}
+            <a href="{% url 'catalog' %}" class="btn-cancel">Отмена</a>
+        {% endif %}
+    </div>
 </form>
 </div>
 

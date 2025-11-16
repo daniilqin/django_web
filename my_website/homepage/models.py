@@ -17,7 +17,8 @@ class Collection(models.Model):
     title = models.CharField(max_length=255, verbose_name="Название коллекции")
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
     content = models.TextField(blank=True, verbose_name="Описание")
-    image = models.ImageField(upload_to='collections/', blank=True, null=True, verbose_name="Изображение коллекции")
+    image = models.ImageField(upload_to='collections/%Y/%m/%d/', default=None, null=True, 
+                                blank=True, verbose_name="Изображение коллекции")
 
     is_published = models.BooleanField(
         choices=tuple(map(lambda x: (bool(x[0]), x[1]), Status.choices)),

@@ -40,6 +40,7 @@ body {
 .top-menu li {
     background: none;
     padding: 0;
+    color: #ffffff;
 }
 
 .top-menu a {
@@ -52,6 +53,30 @@ body {
 }
 
 .top-menu a:hover {
+    opacity: 0.8;
+}
+
+/* Стили для формы выхода */
+.top-menu form {
+    display: inline;
+}
+
+/* Кнопка выхода */
+.top-menu .logout-btn {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    transition: opacity 0.3s;
+}
+
+.top-menu .logout-btn:hover {
     opacity: 0.8;
 }
 
@@ -224,6 +249,7 @@ li {
     right: 0;
     top: 50%;
     transform: translateY(-50%);
+    transition: background-color 0.3s;
 }
 
 .add-product-btn:hover {
@@ -622,8 +648,10 @@ footer a:hover {
     padding: 10px 20px;
     color: #333;
     text-decoration: none;
-    border: 1px solid #ddd;
-    background: #f8f8f8;
+    /* border: 1px solid #ddd;
+    background: #f8f8f8; */
+    border: 1px solid #bbb;
+    background: #e8e8e8;
     border-radius: 3px;
     transition: all 0.3s;
     font-size: 14px;
@@ -701,4 +729,205 @@ footer a:hover {
     background: #333;
     color: #fff;
     border-radius: 3px;
+}
+
+/* Стили для форм входа, регистрации, редактирования профиля */
+.user-form {
+    max-width: 400px;
+    margin: 30px auto;
+    padding: 30px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.user-form .form-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #333;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.user-form input[type="text"],
+.user-form input[type="email"],
+.user-form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+    box-sizing: border-box;
+}
+
+.user-form input[type="text"]:focus,
+.user-form input[type="email"]:focus,
+.user-form input[type="password"]:focus {
+    outline: none;
+    border-color: #333;
+}
+
+.user-form button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background: #000;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.user-form button[type="submit"]:hover {
+    background: #333;
+}
+
+.user-form .form-error {
+    color: #d32f2f;
+    font-size: 12px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.user-form p {
+    margin: 15px 0;
+}
+
+/* Отступ для кнопки в формах login и register (где кнопка в <p>) */
+/* Применяется только если в форме нет .form-actions */
+.user-form:not(:has(.form-actions)) > p:last-child {
+    margin-top: 25px;
+}
+
+.user-form + p {
+    text-align: center;
+}
+
+.user-form + p a {
+    color: #333333;
+    text-decoration: underline;
+    transition: color 0.3s;
+}
+
+.user-form + p a:hover {
+    color: #000;
+    text-decoration: underline;
+}
+
+.user-form .profile-photo {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.user-form .profile-photo img {
+    max-width: 200px;
+    max-height: 200px;
+    width: auto;
+    height: auto;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+}
+
+/* Стили просмотра профиля (для отображения информации в профиле) */
+.profile-view {
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 30px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.profile-view .profile-photo-section {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.profile-view .profile-photo-img {
+    max-width: 200px;
+    max-height: 200px;
+    width: auto;
+    height: auto;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+}
+
+.profile-view .profile-info {
+    margin-bottom: 25px;
+}
+
+.profile-view .profile-info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.profile-view .profile-info-item:last-child {
+    border-bottom: none;
+}
+
+.profile-view .profile-label {
+    font-weight: 500;
+    color: #333;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.profile-view .profile-value {
+    color: #333;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.profile-view .profile-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+.profile-view .btn-edit {
+    display: inline-block;
+    padding: 12px 30px;
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 3px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Montserrat', sans-serif;
+    transition: background-color 0.3s;
+}
+
+.profile-view .btn-edit:hover {
+    background: #333;
+}
+
+/* Стили для кнопок в формах редактирования профиля, смены пароля */
+.user-form .form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+    justify-content: center;
+}
+
+.user-form .form-actions button {
+    width: auto;
+    padding: 12px 30px;
+    font-size: 14px;
+    font-weight: normal;
+    text-transform: none;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.user-form .form-actions .btn-cancel {
+    display: inline-block;
+    padding: 12px 30px;
+    text-align: center;
+    line-height: normal;
 }

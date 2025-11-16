@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{{ title }}</h1>
+
+<form method="post" enctype="multipart/form-data" class="user-form">
+    {% csrf_token %}
+    <div class="form-error">{{ form.non_field_errors }}</div>
+    
+    {% if user.photo %}
+        <p class="profile-photo"><img src="{{ user.photo.url }}" alt="Фото профиля"></p>
+    {% else %}
+        <p class="profile-photo"><img src="{{ default_photo }}" alt="Фото профиля"></p>
+    {% endif %}
+    
+    {% for f in form %}
+        <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}: </label>{{ f }}</p>
+        <div class="form-error">{{ f.errors }}</div>
+    {% endfor %}
+
+    <div class="form-actions">
+        <button type="submit">Сохранить</button>
+        <a href="{% url 'users:profile' %}" class="btn-cancel">Отмена</a>
+    </div>
+</form>
+
+{% endblock %}

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, Http404, HttpResponseNotFound
 from django.views import View
 from django.views.generic import ListView, DetailView, FormView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 
 from datetime import datetime as dt
@@ -79,7 +80,7 @@ class ProductView(CatalogContextMixin, DetailView):
 
 
 # Добавление товара через форму, связанную с моделью (используется в проекте)
-class AddProductView(CatalogContextMixin, CreateView):
+class AddProductView(LoginRequiredMixin, CatalogContextMixin, CreateView):
     model = Product
     form_class = AddProductModelForm
     template_name = 'catalog/add_product.html'
@@ -92,11 +93,12 @@ class AddProductView(CatalogContextMixin, CreateView):
 
 
 # Редактирование товара
-class UpdateProductView(CatalogContextMixin, UpdateView):
+class UpdateProductView(LoginRequiredMixin, CatalogContextMixin, UpdateView):
     model = Product
     form_class = AddProductModelForm
     template_name = 'catalog/add_product.html'
     slug_url_kwarg = 'product_slug'
+    context_object_name = 'product'
     page_title = 'Редактирование товара'
     
     def get_success_url(self):
@@ -108,7 +110,7 @@ class UpdateProductView(CatalogContextMixin, UpdateView):
 
 
 # Удаление товара
-class DeleteProductView(CatalogContextMixin, DeleteView):
+class DeleteProductView(LoginRequiredMixin, CatalogContextMixin, DeleteView):
     model = Product
     template_name = 'catalog/confirm_delete.html'
     slug_url_kwarg = 'product_slug'
@@ -122,7 +124,7 @@ class DeleteProductView(CatalogContextMixin, DeleteView):
 
 
 # Загрузка файла
-class UploadFileView(CatalogContextMixin, FormView):
+class UploadFileView(LoginRequiredMixin, CatalogContextMixin, FormView):
     form_class = UploadFileForm
     template_name = 'catalog/upload_file.html'
     success_url = reverse_lazy('catalog')

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{{ title }}</h1>
+
+<div class="profile-view">
+    <div class="profile-photo-section">
+        {% if user.photo %}
+            <img src="{{ user.photo.url }}" alt="Фото профиля" class="profile-photo-img">
+        {% else %}
+            <img src="{{ default_photo }}" alt="Фото профиля" class="profile-photo-img">
+        {% endif %}
+    </div>
+    
+    <div class="profile-info">
+        <div class="profile-info-item">
+            <span class="profile-label">Имя пользователя:</span>
+            <span class="profile-value">{{ user.username }}</span>
+        </div>
+        
+        <div class="profile-info-item">
+            <span class="profile-label">E-mail:</span>
+            <span class="profile-value">{{ user.email }}</span>
+        </div>
+        
+        {% if user.first_name %}
+        <div class="profile-info-item">
+            <span class="profile-label">Имя:</span>
+            <span class="profile-value">{{ user.first_name }}</span>
+        </div>
+        {% endif %}
+        
+        {% if user.last_name %}
+        <div class="profile-info-item">
+            <span class="profile-label">Фамилия:</span>
+            <span class="profile-value">{{ user.last_name }}</span>
+        </div>
+        {% endif %}
+        
+        {% if user.date_birth %}
+        <div class="profile-info-item">
+            <span class="profile-label">Дата рождения:</span>
+            <span class="profile-value">{{ user.date_birth|date:"d.m.Y" }}</span>
+        </div>
+        {% endif %}
+        
+        <div class="profile-info-item">
+            <span class="profile-label">Дата регистрации:</span>
+            <span class="profile-value">{{ user.date_joined|date:"d.m.Y" }}</span>
+        </div>
+    </div>
+    
+    <div class="profile-actions">
+        <a href="{% url 'users:profile_edit' %}" class="btn-edit">Редактировать профиль</a>
+        <a href="{% url 'users:password_change' %}" class="btn-edit">Сменить пароль</a>
+    </div>
+    
+</div>
+
+{% endblock %}

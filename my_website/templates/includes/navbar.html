@@ -2,19 +2,29 @@
 <ul>
     <li class="logo">
         <a href="{% url 'homepage' %}">
-            <img src="{% static 'homepage/images/logo.png' %}" alt="{{ site_name }}">
+            <img src="{% static 'homepage/images/logo.png' %}" alt="{{ store_name }}">
         </a>
     </li>
+
     <div class="main-nav">
         {% for item in menu %}
-        {% if item.url_name != 'login' %}
         <li>
             <a href="{% url item.url_name %}">{{ item.title }}</a>
         </li>
-        {% endif %}
         {% endfor %}
     </div>
-    <li>
-        <a href="{% url 'login' %}">Войти</a>
-    </li>
+
+    {% if user.is_authenticated %}
+        <li class="last">
+            <a href="{% url 'users:profile' %}">{{ user.username }}</a> | 
+            <form method="post" action="{% url 'users:logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">Выйти</button>
+            </form>
+        </li>
+    {% else %}
+        <li class="last"><a href="{% url 'users:login' %}">Войти</a> | 
+        <a href="{% url 'users:register' %}">Регистрация</a></li>
+    {% endif %}
 </ul>
+<div class="clear"></div>

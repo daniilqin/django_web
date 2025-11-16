@@ -29,6 +29,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('homepage.urls')),
     path('catalog/', include('catalog.urls')),
+    path('users/', include('users.urls', namespace='users')),
 ]
 
 # Добавляем обработку медиа-файлов в режиме разработки

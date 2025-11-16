@@ -6,8 +6,8 @@ register_converter(converters.DateConverter, 'ymd')
 
 urlpatterns = [
     path('', views.CatalogView.as_view(), name='catalog'),
-    path('add_product/', views.AddProductView.as_view(), name='add_product'),
-    path('upload_file/', views.UploadFileView.as_view(), name='upload_file'),
+    path('add-product/', views.AddProductView.as_view(), name='add_product'),
+    path('upload-file/', views.UploadFileView.as_view(), name='upload_file'),
     path('items/<slug:item_slug>/', views.item_detail, name='items'),
     path('events/<ymd:event_date>/', views.event_detail, name='events'),
     path('tag/<slug:tag_slug>/', views.TagView.as_view(), name='tag'),

@@ -10,7 +10,6 @@ MENU = [
     {'title': 'Акции и скидки', 'url_name': 'promotions'},
     {'title': 'Контакты', 'url_name': 'contacts'},
     {'title': 'О сайте', 'url_name': 'about'},
-    {'title': 'Войти', 'url_name': 'login'},
 ]
 
 CONTACTS = [
@@ -26,7 +25,7 @@ def common_context(request):
     Добавляет общий контекст для всех шаблонов.
     """
     return {
-        'site_name': SITE_NAME,
+        'store_name': SITE_NAME,
         'menu': MENU,
         'contacts': CONTACTS,
     }
