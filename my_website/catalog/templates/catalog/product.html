@@ -108,8 +108,12 @@
         <a href="{{ product.category.get_absolute_url }}">❮ К категории «{{ product.category.name }}»</a>
     {% endif %}
     
-    <a href="{% url 'edit_product' product.slug %}" class="btn-edit">Редактировать товар</a>
-    <a href="{% url 'delete_product' product.slug %}" class="btn-delete">Удалить товар</a>
+    {% if perms.catalog.change_product %}
+        <a href="{% url 'edit_product' product.slug %}" class="btn-edit">Редактировать товар</a>
+    {% endif %}
+    {% if perms.catalog.delete_product %}
+        <a href="{% url 'delete_product' product.slug %}" class="btn-delete">Удалить товар</a>
+    {% endif %}
 </div>
 
 {% endblock %}

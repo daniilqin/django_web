@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, Http404, HttpResponseNotFound
 from django.views import View
 from django.views.generic import ListView, DetailView, FormView, CreateView, UpdateView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
 
 from datetime import datetime as dt
@@ -64,12 +64,13 @@ class TagView(CatalogContextMixin, ListView):
 
 
 # Показ товара
-class ProductView(CatalogContextMixin, DetailView):
+class ProductView(PermissionRequiredMixin, LoginRequiredMixin, CatalogContextMixin, DetailView):
     model = Product
     template_name = 'catalog/product.html'
     context_object_name = 'product'
     slug_url_kwarg = 'product_slug'
     page_title = 'Каталог'
+    permission_required = 'catalog.view_product'
     
     def get_queryset(self):
         return Product.published.all()
@@ -80,12 +81,13 @@ class ProductView(CatalogContextMixin, DetailView):
 
 
 # Добавление товара через форму, связанную с моделью (используется в проекте)
-class AddProductView(LoginRequiredMixin, CatalogContextMixin, CreateView):
+class AddProductView(PermissionRequiredMixin, LoginRequiredMixin, CatalogContextMixin, CreateView):
     model = Product
     form_class = AddProductModelForm
     template_name = 'catalog/add_product.html'
     success_url = reverse_lazy('catalog')
     page_title = 'Добавление товара'
+    permission_required = 'catalog.add_product'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -93,13 +95,14 @@ class AddProductView(LoginRequiredMixin, CatalogContextMixin, CreateView):
 
 
 # Редактирование товара
-class UpdateProductView(LoginRequiredMixin, CatalogContextMixin, UpdateView):
+class UpdateProductView(PermissionRequiredMixin, LoginRequiredMixin, CatalogContextMixin, UpdateView):
     model = Product
     form_class = AddProductModelForm
     template_name = 'catalog/add_product.html'
     slug_url_kwarg = 'product_slug'
     context_object_name = 'product'
     page_title = 'Редактирование товара'
+    permission_required = 'catalog.change_product'
     
     def get_success_url(self):
         return reverse_lazy('product', kwargs={'product_slug': self.object.slug})
@@ -110,13 +113,14 @@ class UpdateProductView(LoginRequiredMixin, CatalogContextMixin, UpdateView):
 
 
 # Удаление товара
-class DeleteProductView(LoginRequiredMixin, CatalogContextMixin, DeleteView):
+class DeleteProductView(PermissionRequiredMixin, LoginRequiredMixin, CatalogContextMixin, DeleteView):
     model = Product
     template_name = 'catalog/confirm_delete.html'
     slug_url_kwarg = 'product_slug'
     success_url = reverse_lazy('catalog')
     context_object_name = 'product'
     page_title = 'Удаление товара'
+    permission_required = 'catalog.delete_product'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

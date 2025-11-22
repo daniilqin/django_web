@@ -83,6 +83,9 @@ class Product(models.Model):
         verbose_name_plural = "Товары"
         ordering = ['-created_at']
         indexes = [models.Index(fields=['-created_at']),]
+        permissions = [
+            ('can_publish_product', "Может публиковать и снимать товар с публикации"),
+        ]
 
     def get_absolute_url(self):
         return reverse('product', kwargs={'product_slug': self.slug})

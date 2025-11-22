@@ -805,17 +805,17 @@ footer a:hover {
     margin-top: 25px;
 }
 
-.user-form + p {
+.user-form ~ p {
     text-align: center;
 }
 
-.user-form + p a {
+.user-form ~ p a {
     color: #333333;
     text-decoration: underline;
     transition: color 0.3s;
 }
 
-.user-form + p a:hover {
+.user-form ~ p a:hover {
     color: #000;
     text-decoration: underline;
 }

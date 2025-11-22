@@ -1,4 +1,4 @@
-from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, UpdateView, DetailView
 from django.urls import reverse_lazy
@@ -75,4 +75,27 @@ class UserPasswordChangeView(PasswordChangeView):
 
 class UserPasswordChangeDoneView(PasswordChangeDoneView):
     template_name = 'users/password_change_done.html'
-    extra_context = {'title': 'Пароль успешно изменен!'}
+    extra_context = {'title': 'Пароль изменен'}
+
+
+class UserPasswordResetView(PasswordResetView):
+    template_name = 'users/password_reset_form.html'
+    email_template_name = 'users/password_reset_email.html'
+    success_url = reverse_lazy('users:password_reset_done')
+    extra_context = {'title': 'Восстановление пароля'}
+
+
+class UserPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'users/password_reset_done.html'
+    extra_context = {'title': 'Восстановление пароля'}
+
+
+class UserPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'users/password_reset_confirm.html'
+    success_url = reverse_lazy('users:password_reset_complete')
+    extra_context = {'title': 'Восстановление пароля'}
+
+
+class UserPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'users/password_reset_complete.html'
+    extra_context = {'title': 'Пароль изменен'}
