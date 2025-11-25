@@ -167,3 +167,36 @@ class Review(models.Model):
     
     def __str__(self):
         return f"Отзыв от {self.user.username} на {self.product.name}"
+
+
+class ProductReaction(models.Model):
+    """Реакции пользователей на товары (лайк/дизлайк)"""
+    
+    class ReactionType(models.IntegerChoices):
+        LIKE = 1, 'Нравится'
+        DISLIKE = -1, 'Не нравится'
+    
+    # Связи
+    product = models.ForeignKey(Product, on_delete=models.CASCADE,
+                               related_name='reactions', verbose_name="Товар")
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE,
+                            related_name='product_reactions', verbose_name="Пользователь")
+    
+    # Тип реакции
+    reaction_type = models.SmallIntegerField(choices=ReactionType.choices,
+                                            verbose_name="Тип реакции")
+    
+    # Временная метка
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+    
+    class Meta:
+        verbose_name = "Реакция на товар"
+        verbose_name_plural = "Реакции на товары"
+        # Один пользователь может оставить только одну реакцию на товар
+        unique_together = [['product', 'user']]
+        indexes = [
+            models.Index(fields=['product', 'reaction_type']),
+        ]
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.get_reaction_type_display()} - {self.product.name}"

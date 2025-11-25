@@ -1,6 +1,6 @@
 from operator import is_
 from django.contrib import admin, messages
-from .models import Category, Tag, Product, ProductDetail, Review
+from .models import Category, Tag, Product, ProductDetail, Review, ProductReaction
 from django.utils.html import mark_safe
 
 # Register your models here.
@@ -119,3 +119,18 @@ class ReviewAdmin(admin.ModelAdmin):
     @admin.display(description='Текст отзыва')
     def text_preview(self, obj):
         return obj.text[:50] + '...' if len(obj.text) > 50 else obj.text
+
+
+@admin.register(ProductReaction)
+class ProductReactionAdmin(admin.ModelAdmin):
+    list_display = ['product', 'user', 'reaction_type_display', 'created_at']
+    list_display_links = ['product']
+    list_filter = ['reaction_type', 'created_at', 'product__category']
+    search_fields = ['product__name', 'user__username']
+    readonly_fields = ['created_at']
+    list_per_page = 30
+    ordering = ['-created_at']
+    
+    @admin.display(description='Реакция')
+    def reaction_type_display(self, obj):
+        return '👍 Нравится' if obj.reaction_type == 1 else '👎 Не нравится'

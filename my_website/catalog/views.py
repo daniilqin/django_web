@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.urls import reverse_lazy
 
 from datetime import datetime as dt
-from .models import Product, Category, Tag
+from .models import Product, Category, Tag, ProductReaction
 from .forms import AddProductForm, AddProductModelForm, UploadFileForm, ReviewForm
 from .utils import CatalogContextMixin
 import uuid
@@ -90,11 +90,26 @@ class ProductView(PermissionRequiredMixin, LoginRequiredMixin, CatalogContextMix
         # Добавляем форму для отзыва
         review_form = ReviewForm()
         
+        # Получаем счетчики реакций
+        likes_count = product.reactions.filter(reaction_type=ProductReaction.ReactionType.LIKE).count()
+        dislikes_count = product.reactions.filter(reaction_type=ProductReaction.ReactionType.DISLIKE).count()
+        
+        # Получаем реакцию текущего пользователя
+        user_reaction = None
+        if self.request.user.is_authenticated:
+            try:
+                user_reaction = product.reactions.get(user=self.request.user).reaction_type
+            except ProductReaction.DoesNotExist:
+                user_reaction = None
+        
         context.update({
             'reviews': reviews,
             'user_has_review': user_has_review,
             'review_form': review_form,
             'reviews_count': reviews.count(),
+            'likes_count': likes_count,
+            'dislikes_count': dislikes_count,
+            'user_reaction': user_reaction,
         })
         
         return self.get_mixin_context(context)
@@ -128,6 +143,40 @@ class AddReviewView(LoginRequiredMixin, View):
             'reviews_count': product.reviews.count(),
         }
         return render(request, 'catalog/product.html', context)
+
+
+# Добавление/изменение реакции на товар (лайк/дизлайк)
+class ProductReactionView(LoginRequiredMixin, View):
+    """View для добавления или изменения реакции на товар"""
+    
+    def post(self, request, product_slug):
+        product = get_object_or_404(Product, slug=product_slug, is_published=True)
+        reaction_type = request.POST.get('reaction_type')
+        
+        # Валидация типа реакции
+        if reaction_type not in ['1', '-1']:
+            return redirect('product', product_slug=product_slug)
+        
+        reaction_type = int(reaction_type)
+        
+        # Получаем существующую реакцию пользователя или создаем новую
+        reaction, created = ProductReaction.objects.get_or_create(
+            product=product,
+            user=request.user,
+            defaults={'reaction_type': reaction_type}
+        )
+        
+        # Если реакция уже существовала
+        if not created:
+            # Если нажали на ту же кнопку - удаляем реакцию
+            if reaction.reaction_type == reaction_type:
+                reaction.delete()
+            # Если нажали на другую кнопку - меняем реакцию
+            else:
+                reaction.reaction_type = reaction_type
+                reaction.save()
+        
+        return redirect('product', product_slug=product_slug)
 
 
 # Добавление товара через форму, связанную с моделью (используется в проекте)

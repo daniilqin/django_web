@@ -97,6 +97,36 @@
             <p>Дата добавления: {{ product.created_at|date:"d.m.Y" }}</p>
             <p>Последнее обновление: {{ product.updated_at|date:"d.m.Y H:i" }}</p>
         </div>
+        
+        <!-- Реакции (лайк/дизлайк) -->
+        <div class="product-reactions">
+            {% if user.is_authenticated %}
+                <form method="post" action="{% url 'product_reaction' product.slug %}" class="reaction-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="reaction_type" value="1">
+                    <button type="submit" class="reaction-btn {% if user_reaction == 1 %}active{% endif %}">
+                        👍 <span>{{ likes_count }}</span>
+                    </button>
+                </form>
+                <form method="post" action="{% url 'product_reaction' product.slug %}" class="reaction-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="reaction_type" value="-1">
+                    <button type="submit" class="reaction-btn {% if user_reaction == -1 %}active{% endif %}">
+                        👎 <span>{{ dislikes_count }}</span>
+                    </button>
+                </form>
+            {% else %}
+                <div class="reactions-login-prompt">
+                    <a href="{% url 'users:login' %}?next={{ request.path }}" class="reaction-btn disabled">
+                        👍 <span>{{ likes_count }}</span>
+                    </a>
+                    <a href="{% url 'users:login' %}?next={{ request.path }}" class="reaction-btn disabled">
+                        👎 <span>{{ dislikes_count }}</span>
+                    </a>
+                    <p>Войдите, чтобы оценить товар</p>
+                </div>
+            {% endif %}
+        </div>
     </div>
 </div>
 
