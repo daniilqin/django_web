@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.views.generic import TemplateView, DetailView, ListView
 from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Collection
 from .utils import HomeContextMixin
 
@@ -30,15 +31,23 @@ class IndexView(HomeContextMixin, ListView):
 
 
 # Страница акций и скидок
-class PromotionsView(View):
-    def get(self, request):
-        return HttpResponse('<h1>Акции и скидки</h1>')
+class PromotionsView(LoginRequiredMixin, HomeContextMixin, TemplateView):
+    template_name = 'homepage/promotions.html'
+    page_title = 'Акции и скидки'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context)
 
 
 # Страница контактов
-class ContactsView(View):
-    def get(self, request):
-        return HttpResponse('<h1>Контакты</h1>')
+class ContactsView(HomeContextMixin, TemplateView):
+    template_name = 'homepage/contacts.html'
+    page_title = 'Контакты'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return self.get_mixin_context(context)
 
 
 # Страница "О сайте"
@@ -62,7 +71,7 @@ class LoginView(View):
 
 
 # Отображение конкретной коллекции
-class CollectionView(HomeContextMixin, DetailView):
+class CollectionView(LoginRequiredMixin, HomeContextMixin, DetailView):
     model = Collection
     template_name = 'homepage/collection.html'
     context_object_name = 'collection'

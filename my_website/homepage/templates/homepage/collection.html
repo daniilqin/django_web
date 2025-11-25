@@ -2,17 +2,20 @@
 
 {% block content %}
 
-<h1>{{ collection.title }}</h1>
-<h2>{{ collection.content }}</h2>
+<h1>Коллекция {{ collection.title }}</h1>
 
 <div class="collection-detail">
     {% if collection.image %}
-        <img src="{{ collection.image.url }}" alt="{{ collection.title }}" style="max-width: 300px;">
+        <div class="collection-item-image">
+            <img src="{{ collection.image.url }}" alt="{{ collection.title }}" style="max-width: 300px;">
+        </div>
     {% endif %}
-</div>
 
-<div class="collection-item-content">
-    <a href="{% url 'homepage' %}">❮ Назад</a>
+    <div class="collection-item-content">
+        <p>{{ collection.content|linebreaks }}</p>
+        <a href="{% url 'homepage' %}">❮ Назад</a>
+    </div>
+
 </div>
 
 {% endblock %}

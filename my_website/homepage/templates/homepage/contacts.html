@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page contacts-page">
+    <h1>{{ title }}</h1>
+
+    <p>
+        Если у Вас возникли вопросы по заказам, сотрудничеству, работе сайта или предложения
+        по улучшению сервиса {{ store_name }}, Вы можете связаться со мной любым удобным способом.
+    </p>
+
+    <h2>Контакты для связи</h2>
+
+    <ul class="contacts-list">
+        {% for contact in contacts %}
+            <li class="contact-item">
+                <a href="{{ contact.url_address }}" target="_blank" rel="noopener noreferrer">
+                    {{ contact.name }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <p>
+        Обычно я отвечаю в течение дня. Для оперативной связи лучше всего использовать
+        <strong>Telegram</strong>, для деловых запросов и предложений - <strong>Email</strong>.
+    </p>
+
+    <p>
+        Также Вы можете написать свои идеи по развитию проекта {{ store_name }}:
+        новые бренды, которых не хватает в каталоге, интересующие Вас категории или форматы акций.
+        Обратная связь помогает сделать сервис лучше и удобнее.
+    </p>
+</div>
+{% endblock %}
