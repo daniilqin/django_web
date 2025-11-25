@@ -127,3 +127,43 @@ class ProductDetail(models.Model):
     
     def __str__(self):
         return f"Детали: {self.product.name}"
+
+
+class Review(models.Model):
+    """Отзывы пользователей о товарах"""
+    
+    class Rating(models.IntegerChoices):
+        ONE = 1, '1 звезда'
+        TWO = 2, '2 звезды'
+        THREE = 3, '3 звезды'
+        FOUR = 4, '4 звезды'
+        FIVE = 5, '5 звезд'
+    
+    # Связи
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, 
+                               related_name='reviews', verbose_name="Товар")
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE,
+                            related_name='reviews', verbose_name="Пользователь")
+    
+    # Основные поля
+    text = models.TextField(verbose_name="Текст отзыва")
+    rating = models.PositiveSmallIntegerField(choices=Rating.choices, 
+                                            verbose_name="Оценка")
+    
+    # Временные метки
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
+    
+    class Meta:
+        verbose_name = "Отзыв"
+        verbose_name_plural = "Отзывы"
+        ordering = ['-created_at']
+        # Один пользователь может оставить только один отзыв на товар
+        unique_together = [['product', 'user']]
+        indexes = [
+            models.Index(fields=['-created_at']),
+            models.Index(fields=['product', '-created_at']),
+        ]
+    
+    def __str__(self):
+        return f"Отзыв от {self.user.username} на {self.product.name}"

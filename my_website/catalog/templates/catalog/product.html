@@ -100,6 +100,75 @@
     </div>
 </div>
 
+<!-- Отзывы -->
+<div class="reviews-section">
+    <h3>Отзывы ({{ reviews_count }})</h3>
+    
+    <!-- Форма добавления отзыва -->
+    {% if user.is_authenticated %}
+        {% if not user_has_review %}
+            <div class="add-review-form">
+                <h4>Оставить отзыв</h4>
+                <form method="post" action="{% url 'add_review' product.slug %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{ review_form.rating.label_tag }}
+                        {{ review_form.rating }}
+                    </div>
+                    <div class="form-group">
+                        {{ review_form.text.label_tag }}
+                        {{ review_form.text }}
+                    </div>
+                    {% if review_form.errors %}
+                        <div class="form-errors">
+                            {% for field, errors in review_form.errors.items %}
+                                {% for error in errors %}
+                                    <p class="error">{{ error }}</p>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <button type="submit" class="btn-submit">Отправить отзыв</button>
+                </form>
+            </div>
+        {% else %}
+            <p class="review-notice">Вы уже оставили отзыв на этот товар.</p>
+        {% endif %}
+    {% else %}
+        <div class="login-prompt">
+            <p>Чтобы оставить отзыв, необходимо <a href="{% url 'users:login' %}?next={{ request.path }}">войти в систему</a>.</p>
+        </div>
+    {% endif %}
+    
+    <!-- Список отзывов -->
+    {% if reviews %}
+        <div class="reviews-list">
+            {% for review in reviews %}
+                <div class="review-item">
+                    <div class="review-header">
+                        <strong>{{ review.user.username }}</strong>
+                        <div class="review-rating">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= review.rating %}
+                                    <span class="star filled">★</span>
+                                {% else %}
+                                    <span class="star">☆</span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <span class="review-date">{{ review.created_at|date:"d.m.Y H:i" }}</span>
+                    </div>
+                    <div class="review-text">
+                        {{ review.text|linebreaks }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="no-reviews">Отзывов пока нет. Будьте первым!</p>
+    {% endif %}
+</div>
+
 <!-- Навигация -->
 <div class="navigation">
     <a href="{% url 'catalog' %}">❮ Назад к каталогу</a>

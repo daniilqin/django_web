@@ -1,7 +1,7 @@
 from django import forms
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 import re
-from .models import Product, Category, Tag, ProductDetail
+from .models import Product, Category, Tag, ProductDetail, Review
 
 class AddProductForm(forms.Form):
     """Форма для добавления товара, не связанная с моделью"""
@@ -178,3 +178,38 @@ class AddProductModelForm(forms.ModelForm):
 class UploadFileForm(forms.Form):
     file = forms.FileField(label='Файл')
 
+
+# Форма для добавления отзыва
+class ReviewForm(forms.ModelForm):
+    """Форма для добавления отзыва к товару"""
+    
+    text = forms.CharField(
+        label='Ваш отзыв',
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'placeholder': 'Поделитесь своим мнением о товаре...',
+            'rows': 4,
+        }),
+        validators=[
+            MinLengthValidator(10, message='Отзыв должен содержать не менее 10 символов.'),
+            MaxLengthValidator(1000, message='Отзыв должен содержать не более 1000 символов.'),
+        ]
+    )
+    
+    rating = forms.ChoiceField(
+        label='Оценка',
+        choices=Review.Rating.choices,
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+        })
+    )
+    
+    class Meta:
+        model = Review
+        fields = ['text', 'rating']
+    
+    def clean_text(self):
+        text = self.cleaned_data.get('text')
+        if not text or text.strip() == '':
+            raise forms.ValidationError('Отзыв не может быть пустым.')
+        return text.strip()

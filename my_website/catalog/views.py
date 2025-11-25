@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 
 from datetime import datetime as dt
 from .models import Product, Category, Tag
-from .forms import AddProductForm, AddProductModelForm, UploadFileForm
+from .forms import AddProductForm, AddProductModelForm, UploadFileForm, ReviewForm
 from .utils import CatalogContextMixin
 import uuid
 
@@ -77,7 +77,57 @@ class ProductView(PermissionRequiredMixin, LoginRequiredMixin, CatalogContextMix
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        product = self.get_object()
+        
+        # Получаем отзывы для товара
+        reviews = product.reviews.all()
+        
+        # Проверяем, оставлял ли текущий пользователь отзыв
+        user_has_review = False
+        if self.request.user.is_authenticated:
+            user_has_review = reviews.filter(user=self.request.user).exists()
+        
+        # Добавляем форму для отзыва
+        review_form = ReviewForm()
+        
+        context.update({
+            'reviews': reviews,
+            'user_has_review': user_has_review,
+            'review_form': review_form,
+            'reviews_count': reviews.count(),
+        })
+        
         return self.get_mixin_context(context)
+
+
+# Добавление отзыва к товару
+class AddReviewView(LoginRequiredMixin, View):
+    """View для добавления отзыва к товару"""
+    
+    def post(self, request, product_slug):
+        product = get_object_or_404(Product, slug=product_slug, is_published=True)
+        
+        # Проверяем, не оставлял ли пользователь уже отзыв
+        if product.reviews.filter(user=request.user).exists():
+            return redirect('product', product_slug=product_slug)
+        
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.product = product
+            review.user = request.user
+            review.save()
+            return redirect('product', product_slug=product_slug)
+        
+        # Если форма невалидна, возвращаемся на страницу товара с ошибками
+        context = {
+            'product': product,
+            'reviews': product.reviews.all(),
+            'review_form': form,
+            'user_has_review': False,
+            'reviews_count': product.reviews.count(),
+        }
+        return render(request, 'catalog/product.html', context)
 
 
 # Добавление товара через форму, связанную с моделью (используется в проекте)
